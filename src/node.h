@@ -4,9 +4,10 @@
 
 class Node {
 public:
-  Node(Node* l = nullptr, Node* r = nullptr, int c = 0, char v = '\0'); 
-  void to_string(void) const;
+  Node(int c = 0, char v = '\0', Node* l = nullptr, Node* r = nullptr); 
+  void display(void) const;
   void inc_cost(void);
+  int get_cost(void) const;
 
 private:
   Node* left;

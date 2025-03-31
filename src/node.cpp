@@ -4,7 +4,7 @@
 /**
  * @brief constructor
  */
-Node::Node(Node* l = nullptr, Node* r = nullptr, int c = 0, char v = '\0') {
+Node::Node(int c, char v, Node* l, Node* r) {
   left = l;
   right = r;
   cost = c;
@@ -14,7 +14,7 @@ Node::Node(Node* l = nullptr, Node* r = nullptr, int c = 0, char v = '\0') {
 /**
  * @brief the value and cost of the node
  */
-void Node::to_string(void) const {
+void Node::display(void) const {
   std::cout << "Val: " << value << " Cost: " << cost << '\n';
 }
 
@@ -23,4 +23,11 @@ void Node::to_string(void) const {
  */
 void Node::inc_cost(void) {
   ++cost; 
+}
+
+/**
+ * @brief getter for cost
+ */
+int Node::get_cost(void) const {
+  return cost;
 }
