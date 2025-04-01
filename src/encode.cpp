@@ -36,10 +36,15 @@ Node* Encode::build_tree(const std::unordered_map<char, int>& counts) {
     pq1.push(&nodes.back());
   }
 
+  std::cout << "pq1 Populated" << '\n';
+
+  int i = 0;
   // READ MORE ABOUT SMART POINTERS BEFORE DOING
   while(!pq1.empty() || !pq2.empty()) {
 
-    // If there is only one node left, return
+    std::cout << pq1.size() << " " << pq2.size() << '\n';
+
+    // Base case: if there is only one node left, return
     if (pq1.size() + pq2.size() == 1) {
       if (pq1.size() == 1) {
         Node* ret = pq1.top();
@@ -50,27 +55,51 @@ Node* Encode::build_tree(const std::unordered_map<char, int>& counts) {
         pq1.pop();
         return ret;
       }
-    } 
+    // Base case: if there is one node in each queue, return a parent of both
+    } else if (pq1.size() == 1 && pq2.size() == 1) {
+      nodes.push_back(Node(
+        pq1.top()->get_cost() + pq2.top()->get_cost(),
+        '\0',
+        pq1.top(),
+        pq2.top()
+      ));
+      return &nodes.back();
+    }
 
-    // If there is >1 node, make the two smallest nodes the child of a new node in pq2
+    // Otherwise, make the two smallest nodes the child of a new node in pq2
     Node* temp_left = nullptr;
     Node* temp_right = nullptr;
     while (temp_left == nullptr || temp_right == nullptr) {
-      Node* pq1_top = pq1.top();
-      Node* pq2_top = pq2.top();
-
-      if (pq1_top->get_cost() <= pq2_top->get_cost()) {
-        if (temp_left == nullptr)
-          temp_left = pq1.top();
-        else
-          temp_right = pq1.top();
-
+      if (pq2.empty()) {
+        temp_left = pq1.top();
+        pq1.pop();
+        temp_right = pq1.top();
+        pq1.pop();
+      } else if (pq1.empty()) {
+        temp_left = pq2.top();
+        pq1.pop();
+        temp_right = pq2.top();
+        pq1.pop();
       } else {
-        if (temp_left == nullptr)
-          temp_left = pq1.top();
-        else
-          temp_right = pq1.top();
+        if (pq1.top()->get_cost() <= pq2.top()->get_cost()) {
+          if (temp_left == nullptr) {
+            temp_left = pq1.top();
+            pq1.pop();
+          } else {
+            temp_right = pq1.top();
+            pq1.pop();
+          }
+        } else {
+          if (temp_left == nullptr) {
+            temp_left = pq2.top();
+            pq2.pop();
+          } else {
+            temp_right = pq2.top();
+            pq2.pop();
+          }
+        }
       }
+
     }
 
     nodes.push_back(Node(
@@ -79,8 +108,10 @@ Node* Encode::build_tree(const std::unordered_map<char, int>& counts) {
       temp_left,
       temp_right
     ));
-
     pq2.push(&nodes.back());
+    
+    ++i;
+    if (i > 40) break;
   }
 
   return nullptr;
