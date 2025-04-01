@@ -45,3 +45,13 @@ void Node::set_left(Node* n) {
 void Node::set_right(Node* n) {
   right = n;
 }
+
+/**
+ * @brief traverses the tree
+ */
+void Node::traverse(const std::string buffer) const {
+  std::cout << buffer;
+  display();
+  if (left != nullptr) left->traverse(buffer + "  ");
+  if (right != nullptr) right->traverse(buffer + "  ");
+}

@@ -33,7 +33,9 @@ Node* Encode::build_tree(const std::unordered_map<char, int>& counts) {
   // Populate the first queue
   for (const auto& p : counts) {
     nodes.push_back(Node(p.second, p.first));
+    nodes.back().display();
     pq1.push(&nodes.back());
+    std::cout << &nodes.back() << " " << &pq1.top() << '\n';
   }
 
   std::cout << "pq1 Populated" << '\n';
@@ -102,6 +104,11 @@ Node* Encode::build_tree(const std::unordered_map<char, int>& counts) {
 
     }
 
+    std::cout << "left: ";
+    temp_left->display();
+    std::cout << "right: ";
+    temp_left->display();
+
     nodes.push_back(Node(
       temp_left->get_cost() + temp_right->get_cost(),
       '\0',
@@ -109,9 +116,9 @@ Node* Encode::build_tree(const std::unordered_map<char, int>& counts) {
       temp_right
     ));
     pq2.push(&nodes.back());
-    
-    ++i;
-    if (i > 40) break;
+
+    std::cout << "new_parent: ";
+    nodes.back().display();
   }
 
   return nullptr;
@@ -123,6 +130,7 @@ int main() {
   std::unordered_map<char, int> map;
   Encode e = Encode();
   e.count_chars("FortniteIsAVideoGameGameGameGamdfshfFfdsjk", map);
-  e.build_tree(map);
+  Node* n = e.build_tree(map);
+  n->traverse();
   return 0;
 }

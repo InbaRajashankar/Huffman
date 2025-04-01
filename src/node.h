@@ -10,6 +10,7 @@ public:
   void inc_cost(void);
   void set_left(Node* n);
   void set_right(Node* n);
+  void traverse(const std::string buffer = "") const;
 
 private:
   Node* left;
