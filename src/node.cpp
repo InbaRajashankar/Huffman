@@ -19,6 +19,13 @@ void Node::display(void) const {
 }
 
 /**
+ * @brief getter for cost
+ */
+int Node::get_cost(void) const {
+  return cost;
+}
+
+/**
  * @brief increments cost by 1
  */
 void Node::inc_cost(void) {
@@ -26,8 +33,15 @@ void Node::inc_cost(void) {
 }
 
 /**
- * @brief getter for cost
+ * @brief setter for left
  */
-int Node::get_cost(void) const {
-  return cost;
+void Node::set_left(Node* n) {
+  left = n;
+}
+
+/**
+ * @brief setter for right
+ */
+void Node::set_right(Node* n) {
+  right = n;
 }

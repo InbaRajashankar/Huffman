@@ -6,8 +6,10 @@ class Node {
 public:
   Node(int c = 0, char v = '\0', Node* l = nullptr, Node* r = nullptr); 
   void display(void) const;
-  void inc_cost(void);
   int get_cost(void) const;
+  void inc_cost(void);
+  void set_left(Node* n);
+  void set_right(Node* n);
 
 private:
   Node* left;
