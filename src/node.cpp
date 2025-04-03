@@ -33,6 +33,20 @@ void Node::inc_cost(void) {
 }
 
 /**
+ * @brief getter for left
+ */
+Node* Node::get_left(void) const {
+  return left;
+}
+
+/**
+ * @brief getter for right
+ */
+Node* Node::get_right(void) const {
+  return right;
+}
+
+/**
  * @brief setter for left
  */
 void Node::set_left(Node* n) {
