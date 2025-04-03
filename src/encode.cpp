@@ -19,6 +19,11 @@ void Encode::count_chars(const std::string& s, std::unordered_map<char, int>& co
   }
 }
 
+/**
+ * @brief builds the tree that latently represents the embedding of each character
+ * 
+ * @param counts a map storing character counts in the string
+ */
 Node* Encode::build_tree(const std::unordered_map<char, int>& counts) {
   class NodeComp {
   public:
@@ -31,34 +36,23 @@ Node* Encode::build_tree(const std::unordered_map<char, int>& counts) {
   std::priority_queue <Node*, std::vector<Node*>, NodeComp> pq2;
   
   // Populate the first queue
+  nodes.reserve(2 * counts.size());
   for (const auto& p : counts) {
     nodes.push_back(Node(p.second, p.first));
-    nodes.back().display();
     pq1.push(&nodes.back());
-    std::cout << &nodes.back() << " " << &pq1.top() << '\n';
   }
 
   std::cout << "pq1 Populated" << '\n';
 
-  int i = 0;
-  // READ MORE ABOUT SMART POINTERS BEFORE DOING
   while(!pq1.empty() || !pq2.empty()) {
 
-    std::cout << pq1.size() << " " << pq2.size() << '\n';
+    std::cout << pq1.size() << " " << pq2.size() << " " << (pq1.size() + pq2.size() == 1) << '\n';
 
     // Base case: if there is only one node left, return
-    if (pq1.size() + pq2.size() == 1) {
-      if (pq1.size() == 1) {
-        Node* ret = pq1.top();
-        pq1.pop();
-        return ret;
-      } else {
-        Node* ret = pq2.top();
-        pq1.pop();
-        return ret;
-      }
+    if (pq1.size() + pq2.size() == 1) return pq1.empty() ? pq2.top() : pq1.top();
+    
     // Base case: if there is one node in each queue, return a parent of both
-    } else if (pq1.size() == 1 && pq2.size() == 1) {
+     else if (pq1.size() == 1 && pq2.size() == 1) {
       nodes.push_back(Node(
         pq1.top()->get_cost() + pq2.top()->get_cost(),
         '\0',
@@ -72,42 +66,27 @@ Node* Encode::build_tree(const std::unordered_map<char, int>& counts) {
     Node* temp_left = nullptr;
     Node* temp_right = nullptr;
     while (temp_left == nullptr || temp_right == nullptr) {
+      // if second pq is empty, take a node from first
       if (pq2.empty()) {
-        temp_left = pq1.top();
+        temp_left == nullptr ? temp_left = pq1.top() : temp_right = pq1.top();
         pq1.pop();
-        temp_right = pq1.top();
-        pq1.pop();
+
+      // if first pq is empty, take a node from second
       } else if (pq1.empty()) {
-        temp_left = pq2.top();
-        pq1.pop();
-        temp_right = pq2.top();
-        pq1.pop();
+        temp_left == nullptr ? temp_left = pq2.top() : temp_right = pq2.top();
+        pq2.pop();
+
+      // if both queues have nodes, take the minimal nodes
       } else {
         if (pq1.top()->get_cost() <= pq2.top()->get_cost()) {
-          if (temp_left == nullptr) {
-            temp_left = pq1.top();
-            pq1.pop();
-          } else {
-            temp_right = pq1.top();
-            pq1.pop();
-          }
+          temp_left == nullptr ? temp_left = pq1.top() : temp_right = pq1.top();
+          pq1.pop();
         } else {
-          if (temp_left == nullptr) {
-            temp_left = pq2.top();
-            pq2.pop();
-          } else {
-            temp_right = pq2.top();
-            pq2.pop();
-          }
+          temp_left == nullptr ? temp_left = pq2.top() : temp_right = pq2.top();
+          pq1.pop();
         }
       }
-
     }
-
-    std::cout << "left: ";
-    temp_left->display();
-    std::cout << "right: ";
-    temp_left->display();
 
     nodes.push_back(Node(
       temp_left->get_cost() + temp_right->get_cost(),
@@ -122,15 +101,18 @@ Node* Encode::build_tree(const std::unordered_map<char, int>& counts) {
   }
 
   return nullptr;
-  
-  // CHECK FOR MEMORY LEAKS SOMEHOW
+}
+
+void Encode::build_embeddings(const Node* root) {
+
 }
 
 int main() {
   std::unordered_map<char, int> map;
   Encode e = Encode();
-  e.count_chars("FortniteIsAVideoGameGameGameGamdfshfFfdsjk", map);
+  e.count_chars("FortniteIsAVideoGameGafmeGameGamdfshfFfdsjk", map);
   Node* n = e.build_tree(map);
+  std::cout << &n << '\n';
   n->traverse();
   return 0;
 }
