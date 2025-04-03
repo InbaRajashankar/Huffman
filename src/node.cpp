@@ -26,10 +26,10 @@ int Node::get_cost(void) const {
 }
 
 /**
- * @brief increments cost by 1
+ * @brief getter for value
  */
-void Node::inc_cost(void) {
-  ++cost; 
+char Node::get_value(void) const {
+  return value;
 }
 
 /**
@@ -44,6 +44,13 @@ Node* Node::get_left(void) const {
  */
 Node* Node::get_right(void) const {
   return right;
+}
+
+/**
+ * @brief increments cost by 1
+ */
+void Node::inc_cost(void) {
+  ++cost; 
 }
 
 /**

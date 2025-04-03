@@ -7,6 +7,7 @@ public:
   Node(int c = 0, char v = '\0', Node* l = nullptr, Node* r = nullptr); 
   void display(void) const;
   int get_cost(void) const;
+  char get_value(void) const;
   Node* get_left(void) const;
   Node* get_right(void) const;
   void inc_cost(void);

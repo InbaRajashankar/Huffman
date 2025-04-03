@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stack>
 #include "encode.h"
 
 /**
@@ -104,7 +105,26 @@ Node* Encode::build_tree(const std::unordered_map<char, int>& counts) {
 }
 
 void Encode::build_embeddings(const Node* root) {
+  std::stack<std::pair<const Node*, std::vector<bool>>> to_visit;
+  to_visit.push({root, std::vector<bool>()});
 
+  while (!to_visit.empty()) {
+    std::pair<const Node*, std::vector<bool>> cur = to_visit.top();
+    to_visit.pop();
+    if (cur.first->get_value() != '\0') {
+      embeddings[cur.first->get_value()] = cur.second;
+    }
+    if (cur.first->get_left() != nullptr) {
+      std::vector<bool> l_v = cur.second;
+      l_v.push_back(false);
+      to_visit.push({cur.first->get_left(), lv});
+    }
+    if (cur.first->get_right() != nullptr) {
+      std::vector<bool> l_r = cur.second;
+      l_r.push_back(true);
+      to_visit.push({cur.first->get_left(), l_r});
+    }
+  }
 }
 
 int main() {
