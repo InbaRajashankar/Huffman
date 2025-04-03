@@ -117,7 +117,7 @@ void Encode::build_embeddings(const Node* root) {
     if (cur.first->get_left() != nullptr) {
       std::vector<bool> l_v = cur.second;
       l_v.push_back(false);
-      to_visit.push({cur.first->get_left(), lv});
+      to_visit.push({cur.first->get_left(), l_v});
     }
     if (cur.first->get_right() != nullptr) {
       std::vector<bool> l_r = cur.second;
