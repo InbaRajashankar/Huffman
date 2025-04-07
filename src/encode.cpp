@@ -43,12 +43,7 @@ std::shared_ptr<Node> Encode::build_tree(const std::unordered_map<char, int>& co
     pq1.push(std::make_shared<Node>(nodes.back()));
   }
 
-  std::cout << "pq1 Populated" << '\n';
-
   while(!pq1.empty() || !pq2.empty()) {
-
-    std::cout << pq1.size() << " " << pq2.size() << " " << (pq1.size() + pq2.size() == 1) << '\n';
-
     // Base case: if there is only one node left, return
     if (pq1.size() + pq2.size() == 1) return pq1.empty() ? pq2.top() : pq1.top();
     
@@ -96,18 +91,20 @@ std::shared_ptr<Node> Encode::build_tree(const std::unordered_map<char, int>& co
       temp_right
     ));
     pq2.push(std::make_shared<Node>(nodes.back()));
-
-    std::cout << "new_parent: ";
-    nodes.back().display();
   }
 
   return nullptr;
 }
 
-void Encode::build_embeddings(const std::shared_ptr<Node> root) {
+/**
+ * @brief build a hashmap containing the char to bool embeddings
+ */
+void Encode::build_e_map(const std::shared_ptr<Node> root) {
+  // traverse through the tree, and add the embedding mapping to embeddings
+  // left child -> add 0 to embedding
+  // right child -> add 1 to embedding
   std::stack<std::pair<const std::shared_ptr<Node>, std::vector<bool>>> to_visit;
   to_visit.push({root, std::vector<bool>()});
-
   while (!to_visit.empty()) {
     std::pair<const std::shared_ptr<Node>, std::vector<bool>> cur = to_visit.top();
     to_visit.pop();
@@ -122,17 +119,43 @@ void Encode::build_embeddings(const std::shared_ptr<Node> root) {
     if (cur.first->get_right() != nullptr) {
       std::vector<bool> l_r = cur.second;
       l_r.push_back(true);
-      to_visit.push({cur.first->get_left(), l_r});
+      to_visit.push({cur.first->get_right(), l_r});
     }
   }
+  // print
+  for (const auto& pair : embeddings) {
+    std::cout << pair.first << ' ';
+    for (const bool& b: pair.second) {
+      std::cout << b;
+    }
+    std::cout << std::endl;
+  }
+}
+
+/**
+ * @brief creates boolean (bit) vector from string
+ * the hashmap embeddings should be populated!
+ */
+void Encode::build_embedding(const std::string& s, std::vector<bool>& vec) {
+  if (embeddings.empty())
+    throw std::runtime_error("embeddings not initialized before build_embeddding");
+  for (const char& c : s)
+    for (const bool& b: embeddings[c])
+      vec.push_back(b);
 }
 
 int main() {
   std::unordered_map<char, int> map;
   Encode e = Encode();
   e.count_chars("FortniteIsAVideoGameGafmeGameGamdfshfFfdsjk", map);
-  std::shared_ptr<Node> n = e.build_tree(map);
-  std::cout << &n << '\n';
-  n->traverse();
+  std::shared_ptr<Node> d = e.build_tree(map);
+  // d->traverse();
+  e.build_e_map(d);
+  std::vector<bool> v;
+  e.build_embedding("FortniteIsAVideoGameGafmeGameGamdfshfFfdsjk", v);
+  for (const bool& b : v) {
+    std::cout << b;
+  }
+  std::cout << std::endl;
   return 0;
 }
