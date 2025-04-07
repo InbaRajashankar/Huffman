@@ -4,20 +4,20 @@
 
 class Node {
 public:
-  Node(int c = 0, char v = '\0', Node* l = nullptr, Node* r = nullptr); 
+  Node(int c = 0, char v = '\0', std::shared_ptr<Node> l = nullptr, std::shared_ptr<Node> r = nullptr); 
   void display(void) const;
   int get_cost(void) const;
   char get_value(void) const;
-  Node* get_left(void) const;
-  Node* get_right(void) const;
+  std::shared_ptr<Node> get_left(void) const;
+  std::shared_ptr<Node> get_right(void) const;
   void inc_cost(void);
-  void set_left(Node* n);
-  void set_right(Node* n);
+  void set_left(std::shared_ptr<Node> n);
+  void set_right(std::shared_ptr<Node> n);
   void traverse(const std::string buffer = "") const;
 
 private:
-  Node* left;
-  Node* right;
+  std::shared_ptr<Node> left;
+  std::shared_ptr<Node> right;
   int cost;
   char value; 
 };

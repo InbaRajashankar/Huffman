@@ -25,22 +25,22 @@ void Encode::count_chars(const std::string& s, std::unordered_map<char, int>& co
  * 
  * @param counts a map storing character counts in the string
  */
-Node* Encode::build_tree(const std::unordered_map<char, int>& counts) {
+std::shared_ptr<Node> Encode::build_tree(const std::unordered_map<char, int>& counts) {
   class NodeComp {
   public:
-    bool operator()(const Node* a, const Node* b) {
+    bool operator()(const std::shared_ptr<Node> a, const std::shared_ptr<Node> b) {
       return a->get_cost() >= b->get_cost();
     }
   };
 
-  std::priority_queue <Node*, std::vector<Node*>, NodeComp> pq1;
-  std::priority_queue <Node*, std::vector<Node*>, NodeComp> pq2;
+  std::priority_queue <std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, NodeComp> pq1;
+  std::priority_queue <std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, NodeComp> pq2;
   
   // Populate the first queue
   nodes.reserve(2 * counts.size());
   for (const auto& p : counts) {
     nodes.push_back(Node(p.second, p.first));
-    pq1.push(&nodes.back());
+    pq1.push(std::make_shared<Node>(nodes.back()));
   }
 
   std::cout << "pq1 Populated" << '\n';
@@ -60,12 +60,12 @@ Node* Encode::build_tree(const std::unordered_map<char, int>& counts) {
         pq1.top(),
         pq2.top()
       ));
-      return &nodes.back();
+      return std::make_shared<Node>(nodes.back());
     }
 
     // Otherwise, make the two smallest nodes the child of a new node in pq2
-    Node* temp_left = nullptr;
-    Node* temp_right = nullptr;
+    std::shared_ptr<Node> temp_left = nullptr;
+    std::shared_ptr<Node> temp_right = nullptr;
     while (temp_left == nullptr || temp_right == nullptr) {
       // if second pq is empty, take a node from first
       if (pq2.empty()) {
@@ -95,7 +95,7 @@ Node* Encode::build_tree(const std::unordered_map<char, int>& counts) {
       temp_left,
       temp_right
     ));
-    pq2.push(&nodes.back());
+    pq2.push(std::make_shared<Node>(nodes.back()));
 
     std::cout << "new_parent: ";
     nodes.back().display();
@@ -104,12 +104,12 @@ Node* Encode::build_tree(const std::unordered_map<char, int>& counts) {
   return nullptr;
 }
 
-void Encode::build_embeddings(const Node* root) {
-  std::stack<std::pair<const Node*, std::vector<bool>>> to_visit;
+void Encode::build_embeddings(const std::shared_ptr<Node> root) {
+  std::stack<std::pair<const std::shared_ptr<Node>, std::vector<bool>>> to_visit;
   to_visit.push({root, std::vector<bool>()});
 
   while (!to_visit.empty()) {
-    std::pair<const Node*, std::vector<bool>> cur = to_visit.top();
+    std::pair<const std::shared_ptr<Node>, std::vector<bool>> cur = to_visit.top();
     to_visit.pop();
     if (cur.first->get_value() != '\0') {
       embeddings[cur.first->get_value()] = cur.second;
@@ -131,7 +131,7 @@ int main() {
   std::unordered_map<char, int> map;
   Encode e = Encode();
   e.count_chars("FortniteIsAVideoGameGafmeGameGamdfshfFfdsjk", map);
-  Node* n = e.build_tree(map);
+  std::shared_ptr<Node> n = e.build_tree(map);
   std::cout << &n << '\n';
   n->traverse();
   return 0;

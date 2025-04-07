@@ -4,7 +4,7 @@
 /**
  * @brief constructor
  */
-Node::Node(int c, char v, Node* l, Node* r) {
+Node::Node(int c, char v, std::shared_ptr<Node> l, std::shared_ptr<Node> r) {
   left = l;
   right = r;
   cost = c;
@@ -35,14 +35,14 @@ char Node::get_value(void) const {
 /**
  * @brief getter for left
  */
-Node* Node::get_left(void) const {
+std::shared_ptr<Node> Node::get_left(void) const {
   return left;
 }
 
 /**
  * @brief getter for right
  */
-Node* Node::get_right(void) const {
+std::shared_ptr<Node> Node::get_right(void) const {
   return right;
 }
 
@@ -56,14 +56,14 @@ void Node::inc_cost(void) {
 /**
  * @brief setter for left
  */
-void Node::set_left(Node* n) {
+void Node::set_left(std::shared_ptr<Node> n) {
   left = n;
 }
 
 /**
  * @brief setter for right
  */
-void Node::set_right(Node* n) {
+void Node::set_right(std::shared_ptr<Node> n) {
   right = n;
 }
 
