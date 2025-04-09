@@ -1,6 +1,4 @@
-#ifndef NODE_H
-#define NODE_H
-#endif
+#pragma once
 
 class Node {
 public:

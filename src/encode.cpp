@@ -144,18 +144,18 @@ void Encode::build_embedding(const std::string& s, std::vector<bool>& vec) {
       vec.push_back(b);
 }
 
-int main() {
-  std::unordered_map<char, int> map;
-  Encode e = Encode();
-  e.count_chars("FortniteIsAVideoGameGafmeGameGamdfshfFfdsjk", map);
-  std::shared_ptr<Node> d = e.build_tree(map);
-  // d->traverse();
-  e.build_e_map(d);
-  std::vector<bool> v;
-  e.build_embedding("FortniteIsAVideoGameGafmeGameGamdfshfFfdsjk", v);
-  for (const bool& b : v) {
-    std::cout << b;
-  }
-  std::cout << std::endl;
-  return 0;
-}
+// int main() {
+//   std::unordered_map<char, int> map;
+//   Encode e = Encode();
+//   e.count_chars("FortniteIsAVideoGameGafmeGameGamdfshfFfdsjk", map);
+//   std::shared_ptr<Node> d = e.build_tree(map);
+//   // d->traverse();
+//   e.build_e_map(d);
+//   std::vector<bool> v;
+//   e.build_embedding("FortniteIsAVideoGameGafmeGameGamdfshfFfdsjk", v);
+//   for (const bool& b : v) {
+//     std::cout << b;
+//   }
+//   std::cout << std::endl;
+//   return 0;
+// }
