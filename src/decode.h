@@ -5,5 +5,10 @@
 #include <unordered_map>
 #include "node.h"
 
-std::shared_ptr<Node> rebuild_tree(const std::vector<bool>& bits);
-std::string decode_bits(const std::vector<bool>& bits, const Node& root);
+class Decode {
+public:
+  void rebuild_tree(const std::unordered_map<char, std::vector<bool>>& map);
+  std::string decode_bits(const std::vector<bool>& bits);
+private:
+  std::shared_ptr<Node> embedding_tree_root;
+};

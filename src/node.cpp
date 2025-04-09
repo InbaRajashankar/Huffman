@@ -54,6 +54,13 @@ void Node::inc_cost(void) {
 }
 
 /**
+ * @brief setter for value
+ */
+void Node::set_value(char c) {
+  value = c;
+}
+
+/**
  * @brief setter for left
  */
 void Node::set_left(std::shared_ptr<Node> n) {

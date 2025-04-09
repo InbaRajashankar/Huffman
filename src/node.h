@@ -9,6 +9,7 @@ public:
   std::shared_ptr<Node> get_left(void) const;
   std::shared_ptr<Node> get_right(void) const;
   void inc_cost(void);
+  void set_value(char c);
   void set_left(std::shared_ptr<Node> n);
   void set_right(std::shared_ptr<Node> n);
   void traverse(const std::string buffer = "") const;
