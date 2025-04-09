@@ -6,6 +6,9 @@ huff: main.o encode.o io.o node.o
 encode: encode.o node.o
 	g++ $(FLAGS) $^ -o encode
 
+io: io.o
+	g++ $(FLAGS) $^ -o io
+
 main.o: src/main.cpp src/node.h src/encode.h src/io.h
 	g++ $(FLAGS) -c $< -o main.o
 
@@ -19,4 +22,4 @@ io.o: src/io.cpp src/io.h
 	g++ $(FLAGS) -c $< -o io.o
 
 clean:
-	rm -rf *.o encode huff
+	rm -rf *.o encode huff io

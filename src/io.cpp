@@ -96,3 +96,52 @@ void write_cmprsd(const std::string& path, const std::vector<bool>& content) {
 
   out_file.close();
 }
+
+/**
+ * @brief write an unordered_map to a .json file
+ * 
+ * @param path filepath
+ * @param map the map
+ */
+void write_mapjson(const std::string& path, const std::unordered_map<char, std::vector<bool>>& map) {
+  std::ofstream out_file(path);
+  if (!out_file.is_open())
+    throw std::runtime_error("Could not open file: " + path);
+  
+  // Iterate through the map, and insert entries
+  size_t map_size = map.size();
+  size_t cur_ind = 1;
+  out_file << "{\n";
+  for (const auto& item : map) {
+    out_file << "\t\"" << item.first << "\": \"";
+
+    // Insert bools in vector one by one
+    for (const bool b : item.second)
+      out_file << b;
+    
+    // Don't add comma after last element
+    if (cur_ind < map_size) 
+      out_file << "\",\n";
+    else
+      out_file << "\"\n";
+    ++cur_ind;
+  }
+  out_file << "}";
+  out_file.close();
+}
+
+// int main() {
+//   std::unordered_map<char, std::vector<bool>> test_map;
+//   test_map['a'] = {true, false, true};
+//   test_map['b'] = {false, false, true, true, false};
+//   test_map['c'] = {true, true, true, true};
+//   test_map['d'] = {false};
+//   test_map['e'] = {true, false, true, false, true, false, true, false};
+//   test_map['f'] = {false, false, false};
+//   test_map['g'] = {true, false, true, true, false, true, false, true, true, true};
+//   test_map['z'] = {};
+//   test_map['@'] = {true, true, false};
+//   test_map['#'] = {false, true, false, true};
+//   write_mapjson("poop.json", test_map);
+//   return 0;
+// }
