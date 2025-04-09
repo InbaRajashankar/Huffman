@@ -1,6 +1,6 @@
 FLAGS := -std=c++17 -Wall -Wextra
 
-main: main.o encode.o io.o node.o
+huff: main.o encode.o io.o node.o
 	g++ $(FLAGS) $^ -o main
 
 encode: encode.o node.o
@@ -19,4 +19,4 @@ io.o: src/io.cpp src/io.h
 	g++ $(FLAGS) -c $< -o io.o
 
 clean:
-	rm -rf *.o encode main
+	rm -rf *.o encode huff
