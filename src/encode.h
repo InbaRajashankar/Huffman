@@ -7,11 +7,15 @@
 
 class Encode {
 public:
-  void count_chars(const std::string& s, std::unordered_map<char, int>& counts);
-  std::shared_ptr<Node> build_tree(const std::unordered_map<char, int>& counts);
+  Encode(std::string str) : s(str) {}
+  void count_chars();
+  std::shared_ptr<Node> build_tree(void);
   void build_e_map(const std::shared_ptr<Node> root);
-  void build_embedding(const std::string& s, std::vector<bool>& vec);
+  std::unordered_map<char, std::vector<bool>> get_e_map(void) const;
+  void build_embedding(std::vector<bool>& vec) const;
 private:
+  const std::string s;
+  std::unordered_map<char, int> counts;
   std::vector<Node> nodes;
   std::unordered_map<char, std::vector<bool>> embeddings;
 };

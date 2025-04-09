@@ -6,26 +6,25 @@
  * @brief populated hashmap containing the counts of characters in a string
  * 
  * @param s the string to be counted
- * @param counts the hashmap to be populated
  */
-void Encode::count_chars(const std::string& s, std::unordered_map<char, int>& counts) {
-  if (!counts.empty())
-    throw std::invalid_argument("A non-empty unordered_map was passed in!");
-
-  for (char c : s) {
+void Encode::count_chars() {
+  std::cout << "s: " << s << '\n';
+  for (const char& c : s) {
     if (counts.find(c) != counts.end())
       ++counts[c];
     else
       counts[c] = 1;
   }
+  std::cout << "CHAR COUNTS:\n";
+  for (const auto& pair: counts) {
+    std::cout << pair.first << " " << pair.second << '\n';
+  }
 }
 
 /**
  * @brief builds the tree that latently represents the embedding of each character
- * 
- * @param counts a map storing character counts in the string
  */
-std::shared_ptr<Node> Encode::build_tree(const std::unordered_map<char, int>& counts) {
+std::shared_ptr<Node> Encode::build_tree(void) {
   class NodeComp {
   public:
     bool operator()(const std::shared_ptr<Node> a, const std::shared_ptr<Node> b) {
@@ -35,15 +34,21 @@ std::shared_ptr<Node> Encode::build_tree(const std::unordered_map<char, int>& co
 
   std::priority_queue <std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, NodeComp> pq1;
   std::priority_queue <std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, NodeComp> pq2;
+
+  if (counts.empty())
+    throw std::runtime_error("Encoder: counts not populated when build_tree called");
   
   // Populate the first queue
   nodes.reserve(2 * counts.size());
   for (const auto& p : counts) {
+    std::cout << p.first << '\n';
     nodes.push_back(Node(p.second, p.first));
     pq1.push(std::make_shared<Node>(nodes.back()));
   }
 
   while(!pq1.empty() || !pq2.empty()) {
+    std::cout << '\n';
+    nodes.back().traverse();
     // Base case: if there is only one node left, return
     if (pq1.size() + pq2.size() == 1) return pq1.empty() ? pq2.top() : pq1.top();
     
@@ -79,7 +84,7 @@ std::shared_ptr<Node> Encode::build_tree(const std::unordered_map<char, int>& co
           pq1.pop();
         } else {
           temp_left == nullptr ? temp_left = pq2.top() : temp_right = pq2.top();
-          pq1.pop();
+          pq2.pop();
         }
       }
     }
@@ -124,14 +129,13 @@ void Encode::build_e_map(const std::shared_ptr<Node> root) {
       to_visit.push({cur.first->get_right(), l_r});
     }
   }
-  // print
-  for (const auto& pair : embeddings) {
-    std::cout << pair.first << ' ';
-    for (const bool& b: pair.second) {
-      std::cout << b;
-    }
-    std::cout << std::endl;
-  }
+}
+
+/**
+ * @brief getter for embeddings map
+ */
+std::unordered_map<char, std::vector<bool>> Encode::get_e_map(void) const {
+  return embeddings;
 }
 
 /**
@@ -141,26 +145,41 @@ void Encode::build_e_map(const std::shared_ptr<Node> root) {
  * @param s the string to be converted
  * @param vec a vector of boolean to store the embeddings
  */
-void Encode::build_embedding(const std::string& s, std::vector<bool>& vec) {
+void Encode::build_embedding(std::vector<bool>& vec) const {
   if (embeddings.empty())
     throw std::runtime_error("embeddings not initialized before build_embeddding");
   for (const char& c : s)
-    for (const bool& b: embeddings[c])
-      vec.push_back(b);
+    try {
+      for (const bool& b : embeddings.at(c))
+        vec.push_back(b);
+    } catch (std::out_of_range& e) {
+      std::cerr << c << " is not found in embeddings!\n";
+      throw;
+    }
 }
 
-// int main() {
-//   std::unordered_map<char, int> map;
-//   Encode e = Encode();
-//   e.count_chars("FortniteIsAVideoGameGafmeGameGamdfshfFfdsjk", map);
-//   std::shared_ptr<Node> d = e.build_tree(map);
-//   // d->traverse();
-//   e.build_e_map(d);
-//   std::vector<bool> v;
-//   e.build_embedding("FortniteIsAVideoGameGafmeGameGamdfshfFfdsjk", v);
-//   for (const bool& b : v) {
-//     std::cout << b;
-//   }
-//   std::cout << std::endl;
-//   return 0;
-// }
+int main() {
+  std::unordered_map<char, int> map;
+  Encode e = Encode("FortniteIsAVideoGameGafmeGameGamdfshfFfdsjk");
+  e.count_chars();
+  std::shared_ptr<Node> d = e.build_tree();
+  d->traverse();
+  e.build_e_map(d);
+  std::cout << "\nEmbeddings Map built!\n";
+  std::unordered_map<char, std::vector<bool>> m = e.get_e_map();
+  for (const auto& pair : m) {
+    std::cout << pair.first << " ";
+    for (const bool& b : pair.second) {
+      std::cout << b;
+    }
+    std::cout << '\n';
+  }
+  std::vector<bool> v;
+
+  e.build_embedding(v);
+  for (const bool& b : v) {
+    std::cout << b;
+  }
+  std::cout << std::endl;
+  return 0;
+}
