@@ -98,6 +98,8 @@ std::shared_ptr<Node> Encode::build_tree(const std::unordered_map<char, int>& co
 
 /**
  * @brief build a hashmap containing the char to bool embeddings
+ * 
+ * @param root the root of the embedding tree
  */
 void Encode::build_e_map(const std::shared_ptr<Node> root) {
   // traverse through the tree, and add the embedding mapping to embeddings
@@ -135,6 +137,9 @@ void Encode::build_e_map(const std::shared_ptr<Node> root) {
 /**
  * @brief creates boolean (bit) vector from string
  * the hashmap embeddings should be populated!
+ * 
+ * @param s the string to be converted
+ * @param vec a vector of boolean to store the embeddings
  */
 void Encode::build_embedding(const std::string& s, std::vector<bool>& vec) {
   if (embeddings.empty())
