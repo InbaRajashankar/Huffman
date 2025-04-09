@@ -158,28 +158,28 @@ void Encode::build_embedding(std::vector<bool>& vec) const {
     }
 }
 
-int main() {
-  std::unordered_map<char, int> map;
-  Encode e = Encode("FortniteIsAVideoGameGafmeGameGamdfshfFfdsjk");
-  e.count_chars();
-  std::shared_ptr<Node> d = e.build_tree();
-  d->traverse();
-  e.build_e_map(d);
-  std::cout << "\nEmbeddings Map built!\n";
-  std::unordered_map<char, std::vector<bool>> m = e.get_e_map();
-  for (const auto& pair : m) {
-    std::cout << pair.first << " ";
-    for (const bool& b : pair.second) {
-      std::cout << b;
-    }
-    std::cout << '\n';
-  }
-  std::vector<bool> v;
+// int main() {
+//   std::unordered_map<char, int> map;
+//   Encode e = Encode("FortniteIsAVideoGameGafmeGameGamdfshfFfdsjk");
+//   e.count_chars();
+//   std::shared_ptr<Node> d = e.build_tree();
+//   d->traverse();
+//   e.build_e_map(d);
+//   std::cout << "\nEmbeddings Map built!\n";
+//   std::unordered_map<char, std::vector<bool>> m = e.get_e_map();
+//   for (const auto& pair : m) {
+//     std::cout << pair.first << " ";
+//     for (const bool& b : pair.second) {
+//       std::cout << b;
+//     }
+//     std::cout << '\n';
+//   }
+//   std::vector<bool> v;
 
-  e.build_embedding(v);
-  for (const bool& b : v) {
-    std::cout << b;
-  }
-  std::cout << std::endl;
-  return 0;
-}
+//   e.build_embedding(v);
+//   for (const bool& b : v) {
+//     std::cout << b;
+//   }
+//   std::cout << std::endl;
+//   return 0;
+// }

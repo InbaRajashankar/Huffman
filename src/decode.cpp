@@ -31,7 +31,7 @@ void Decode::rebuild_tree(const std::unordered_map<char, std::vector<bool>>& map
  * 
  * @param bits a boolean vector representing the bits
  */
-std::string Decode::decode_bits(const std::vector<bool>& bits) {
+std::string Decode::decode_bits(const std::vector<bool>& bits) const {
   std::shared_ptr<Node> temp = embedding_tree_root;
   std::string s;
   // traverse through the tree based on the bit pattern, and add a char to the string
