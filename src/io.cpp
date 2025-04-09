@@ -98,6 +98,39 @@ void write_cmprsd(const std::string& path, const std::vector<bool>& content) {
 }
 
 /**
+ * @brief reads contents of json into unorderedmap
+ * 
+ * @param path the json filepath
+ */
+std::unordered_map<char, std::vector<bool>> read_mapjson(const std::string& path) {
+  std::unordered_map<char, std::vector<bool>> map;
+  std::ifstream in_file(path);
+  std::string buffer;
+
+  if (!in_file.is_open())
+    throw std::runtime_error("Could not open file: " + path); 
+  
+  while (getline(in_file, buffer)) {
+    // form the vector
+    if (buffer.find(":") != std::string::npos) {
+      std::vector<bool> b_v;
+      for (const char& b : buffer.substr(3)) {
+        if (b == '0')
+          b_v.push_back(false);
+        else if (b == '1')
+          b_v.push_back(true);
+      }
+
+      // insert into map
+      map[buffer[2]] = std::move(b_v);
+    }
+  }
+
+  in_file.close();
+  return map;
+}
+
+/**
  * @brief write an unordered_map to a .json file
  * 
  * @param path filepath
@@ -130,18 +163,28 @@ void write_mapjson(const std::string& path, const std::unordered_map<char, std::
   out_file.close();
 }
 
-// int main() {
-//   std::unordered_map<char, std::vector<bool>> test_map;
-//   test_map['a'] = {true, false, true};
-//   test_map['b'] = {false, false, true, true, false};
-//   test_map['c'] = {true, true, true, true};
-//   test_map['d'] = {false};
-//   test_map['e'] = {true, false, true, false, true, false, true, false};
-//   test_map['f'] = {false, false, false};
-//   test_map['g'] = {true, false, true, true, false, true, false, true, true, true};
-//   test_map['z'] = {};
-//   test_map['@'] = {true, true, false};
-//   test_map['#'] = {false, true, false, true};
-//   write_mapjson("poop.json", test_map);
-//   return 0;
-// }
+
+
+int main() {
+  std::unordered_map<char, std::vector<bool>> test_map;
+  test_map['a'] = {true, false, true};
+  test_map['b'] = {false, false, true, true, false};
+  test_map['c'] = {true, true, true, true};
+  test_map['d'] = {false};
+  test_map['e'] = {true, false, true, false, true, false, true, false};
+  test_map['f'] = {false, false, false};
+  test_map['g'] = {true, false, true, true, false, true, false, true, true, true};
+  test_map['z'] = {};
+  test_map['@'] = {true, true, false};
+  test_map['#'] = {false, true, false, true};
+  test_map['1'] = {true};
+  write_mapjson("poop.json", test_map);
+  std::unordered_map<char, std::vector<bool>> test_map2 = read_mapjson("poop.json");
+  for (const auto& item : test_map2) {
+    std::cout << item.first << " ";
+    for (const bool& b : item.second)
+      std::cout << b;
+    std::cout << '\n';
+  }
+  return 0;
+}
