@@ -91,3 +91,21 @@ void encode_file(const std::string& src, const std::string& dest_huff, const std
   write_cmprsd(dest_huff, embedding_vector);
   write_mapjson(dest_json, encoder.get_e_map());
 }
+
+/**
+ * @brief decodes a file
+ * 
+ * @param src_h file path, source .huff compressed file
+ * @param src_j file path, source .json file storing embedding map
+ * @param dest file path, source .txt file
+ */
+void decode_file(const std::string& src_h, const std::string& src_j, const std::string& dest) {
+  std::vector<bool> bits = read_cmprsd(src_h);
+  std::unordered_map<char, std::vector<bool>> embedding_map = read_mapjson(src_j);
+
+  Decode decoder = Decode();
+  decoder.rebuild_tree(embedding_map);
+  std::string plaintext = decoder.decode_bits(bits);
+
+  write_text(dest, plaintext);
+}
