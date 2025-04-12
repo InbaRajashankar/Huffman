@@ -8,9 +8,9 @@
 class Encode {
 public:
   Encode(std::string str) : s(str) {}
-  void count_chars();
+  void count_chars(void);
   std::shared_ptr<Node> build_tree(void);
-  void build_e_map(const std::shared_ptr<Node> root);
+  void build_e_map(const std::shared_ptr<Node> root, bool debug=false);
   std::unordered_map<char, std::vector<bool>> get_e_map(void) const;
   void build_embedding(std::vector<bool>& vec) const;
 private:

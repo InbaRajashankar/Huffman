@@ -7,7 +7,7 @@
  * 
  * @param s the string to be counted
  */
-void Encode::count_chars() {
+void Encode::count_chars(void) {
   for (const char& c : s) {
     if (counts.find(c) != counts.end())
       ++counts[c];
@@ -98,7 +98,7 @@ std::shared_ptr<Node> Encode::build_tree(void) {
  * 
  * @param root the root of the embedding tree
  */
-void Encode::build_e_map(const std::shared_ptr<Node> root) {
+void Encode::build_e_map(const std::shared_ptr<Node> root, bool debug) {
   // traverse through the tree, and add the embedding mapping to embeddings
   // left child -> add 0 to embedding
   // right child -> add 1 to embedding
@@ -119,6 +119,16 @@ void Encode::build_e_map(const std::shared_ptr<Node> root) {
       std::vector<bool> l_r = cur.second;
       l_r.push_back(true);
       to_visit.push({cur.first->get_right(), l_r});
+    }
+  }
+
+  if (debug) {
+    std::cout << "EMBEDDING MAP CREATED\n";
+    for (const auto& pair : embeddings) {
+      std::cout << pair.first << " : ";
+      for (const bool& b : pair.second)
+        std::cout << b;
+      std::cout << '\n';
     }
   }
 }

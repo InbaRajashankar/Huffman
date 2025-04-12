@@ -105,7 +105,7 @@ void encode_file(const std::string& src, const std::string& dest_huff, const std
   Encode encoder = Encode(file_text);
   encoder.count_chars();
   std::shared_ptr<Node> n = encoder.build_tree();
-  encoder.build_e_map(n);
+  encoder.build_e_map(n, true);
   encoder.build_embedding(embedding_vector);
 
   write_cmprsd(dest_huff, embedding_vector);
@@ -124,7 +124,7 @@ void decode_file(const std::string& src_h, const std::string& src_j, const std::
   std::unordered_map<char, std::vector<bool>> embedding_map = read_mapjson(src_j);
 
   Decode decoder = Decode();
-  decoder.rebuild_tree(embedding_map);
+  decoder.rebuild_tree(embedding_map, true);
   std::string plaintext = decoder.decode_bits(bits);
 
   write_text(dest, plaintext);

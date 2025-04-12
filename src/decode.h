@@ -7,7 +7,7 @@
 
 class Decode {
 public:
-  void rebuild_tree(const std::unordered_map<char, std::vector<bool>>& map);
+  void rebuild_tree(const std::unordered_map<char, std::vector<bool>>& map, bool debug=false);
   std::string decode_bits(const std::vector<bool>& bits) const;
 private:
   std::shared_ptr<Node> embedding_tree_root;

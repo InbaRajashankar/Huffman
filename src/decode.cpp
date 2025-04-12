@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "decode.h"
 
 /**
@@ -5,7 +7,18 @@
  * 
  * @param map a map storing the characters and their bit embeddings
  */
-void Decode::rebuild_tree(const std::unordered_map<char, std::vector<bool>>& map) {
+void Decode::rebuild_tree(const std::unordered_map<char, std::vector<bool>>& map, bool debug) {
+  
+  if (debug) {
+    std::cout << "EMBEDDING MAP READ IN\n";
+    for (const auto& pair : map) {
+      std::cout << pair.first << " : ";
+      for (const bool& b : pair.second)
+        std::cout << b;
+      std::cout << '\n';
+    }
+  }
+
   std::shared_ptr<Node> root = std::make_shared<Node>(Node());
   // for each character...
   for (const auto& item : map) {
@@ -22,7 +35,6 @@ void Decode::rebuild_tree(const std::unordered_map<char, std::vector<bool>>& map
     }
     temp->set_value(item.first);
   }
-  root->traverse();
   embedding_tree_root = root;
 }
 
