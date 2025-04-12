@@ -8,16 +8,11 @@
  * @param s the string to be counted
  */
 void Encode::count_chars() {
-  std::cout << "s: " << s << '\n';
   for (const char& c : s) {
     if (counts.find(c) != counts.end())
       ++counts[c];
     else
       counts[c] = 1;
-  }
-  std::cout << "CHAR COUNTS:\n";
-  for (const auto& pair: counts) {
-    std::cout << pair.first << " " << pair.second << '\n';
   }
 }
 
@@ -41,14 +36,11 @@ std::shared_ptr<Node> Encode::build_tree(void) {
   // Populate the first queue
   nodes.reserve(2 * counts.size());
   for (const auto& p : counts) {
-    std::cout << p.first << '\n';
     nodes.push_back(Node(p.second, p.first));
     pq1.push(std::make_shared<Node>(nodes.back()));
   }
 
   while(!pq1.empty() || !pq2.empty()) {
-    std::cout << '\n';
-    nodes.back().traverse();
     // Base case: if there is only one node left, return
     if (pq1.size() + pq2.size() == 1) return pq1.empty() ? pq2.top() : pq1.top();
     

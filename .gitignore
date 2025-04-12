@@ -5,3 +5,4 @@ main
 huff
 io
 decode
+tests/end2end_tests/dump/

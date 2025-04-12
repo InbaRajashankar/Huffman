@@ -3,6 +3,9 @@ FLAGS := -std=c++17 -Wall -Wextra
 huff: main.o encode.o decode.o io.o node.o
 	g++ $(FLAGS) $^ -o huff
 
+end2end: huff
+	python3 tests/end2end_tests/end2end.py
+
 encode: encode.o node.o
 	g++ $(FLAGS) $^ -o encode
 
