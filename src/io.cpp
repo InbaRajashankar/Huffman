@@ -113,8 +113,11 @@ std::unordered_map<char, std::vector<bool>> read_mapjson(const std::string& path
   while (getline(in_file, buffer)) {
     // form the vector
     if (buffer.find(":") != std::string::npos) {
+      std::bitset<8> c_bits(buffer.substr(2,8));
+      char c = static_cast<char>(c_bits.to_ulong());
+
       std::vector<bool> b_v;
-      for (const char& b : buffer.substr(3)) {
+      for (const char& b : buffer.substr(11)) {
         if (b == '0')
           b_v.push_back(false);
         else if (b == '1')
@@ -122,7 +125,7 @@ std::unordered_map<char, std::vector<bool>> read_mapjson(const std::string& path
       }
 
       // insert into map
-      map[buffer[2]] = std::move(b_v);
+      map[c] = std::move(b_v);
     }
   }
 
@@ -146,7 +149,14 @@ void write_mapjson(const std::string& path, const std::unordered_map<char, std::
   size_t cur_ind = 1;
   out_file << "{\n";
   for (const auto& item : map) {
-    out_file << "\t\"" << item.first << "\": \"";
+    out_file << "\t\"";
+
+    // Convert char to its 8-bit binary representation
+    std::bitset<8> bits(item.first);
+    for (int i = 7; i >= 0; i--)
+      out_file << (bits.test(i) ? '1' : '0');
+
+    out_file << "\": \"";
 
     // Insert bools in vector one by one
     for (const bool b : item.second)
