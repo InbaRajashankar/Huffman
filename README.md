@@ -8,8 +8,8 @@ A C++ program that compresses and decompresses text files using Huffman encoding
 
 ### Build Instructions  
 ```sh
-$ git clone [your-repo-url]  
-$ cd huffman  
+$ git clone [repo-url]  
+$ cd Huffman  
 $ make  
 ```
 
