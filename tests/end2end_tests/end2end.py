@@ -32,7 +32,7 @@ def end_to_end():
 
     # check if contents match
     source_text = open(text_files_path+file, "r").read()
-    re_formed_text = open("./tests/end2end_tests/"+file_base+"2.txt", "r").read()
+    re_formed_text = open("./tests/end2end_tests/dump/"+file_base+"2.txt", "r").read()
     if source_text == re_formed_text:
       print(f"\n{file_base} encoding/decoding SUCCESS!\n")
     else:

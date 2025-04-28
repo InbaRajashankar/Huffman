@@ -48,7 +48,8 @@ std::string Decode::decode_bits(const std::vector<bool>& bits) const {
   std::string s;
   // traverse through the tree based on the bit pattern, and add a char to the string
   // if a char-containing node is found
-  for (const bool& b: bits) {
+  for (unsigned long i = 0; i < bits.size(); ++i) {
+    const bool& b = bits[i];
     if (temp->get_value() == '\0') {
       if (!b) {
         if (temp->get_left() != nullptr)
@@ -62,6 +63,7 @@ std::string Decode::decode_bits(const std::vector<bool>& bits) const {
         else 
           throw std::runtime_error("Error decoding");
     } else {
+      --i;
       s += temp->get_value();
       temp = embedding_tree_root;
     }

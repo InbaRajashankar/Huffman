@@ -71,7 +71,7 @@ std::vector<bool> read_cmprsd(const std::string& path) {
  * @param content bits to be written
  */
 void write_cmprsd(const std::string& path, const std::vector<bool>& content) {
-  std::ofstream out_file(path);
+  std::ofstream out_file(path, std::ios::binary);
   if (!out_file.is_open())
     throw std::runtime_error("Could not open file: " + path);
 
